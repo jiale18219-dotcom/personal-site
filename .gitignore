@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+dist
+coverage
+.DS_Store
+*.log
+.claude
+.playwright-mcp
+ui-prompt_new.md
+介绍图片
+/playground
