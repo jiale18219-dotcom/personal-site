@@ -1,4 +1,5 @@
 import { PostStatus, PostVisibility, type Post } from "@prisma/client";
+import { MarkdownEditor } from "@/components/admin/markdown-editor";
 
 type PostFormProps = {
   post?: Post;
@@ -48,10 +49,10 @@ export function PostForm({ post, action, submitLabel }: PostFormProps) {
         </label>
       </div>
 
-      <label className="admin-field">
-        Body Markdown
-        <textarea name="bodyMarkdown" rows={22} defaultValue={post?.bodyMarkdown ?? ""} />
-      </label>
+      <div className="admin-field">
+        <span>Markdown</span>
+        <MarkdownEditor name="bodyMarkdown" initialMarkdown={post?.bodyMarkdown ?? ""} />
+      </div>
 
       <button type="submit">{submitLabel}</button>
     </form>

@@ -2134,3 +2134,13 @@ button {
     grid-template-columns: 1fr;
   }
 }
+.admin-markdown-editor {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.admin-markdown-editor .mdxeditor {
+  min-height: 520px;
+}

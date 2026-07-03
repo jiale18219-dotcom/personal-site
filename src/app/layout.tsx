@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CustomCursor } from "@/components/custom-cursor";
+import "@mdxeditor/editor/style.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
