@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { PostVisibility } from "@prisma/client";
 
-import { getMediaCacheControl } from "./helpers";
+import { getMediaResponseHeaders } from "./helpers";
 
 export const runtime = "nodejs";
 
@@ -34,10 +34,7 @@ export async function GET(_request: Request, context: MediaRouteContext) {
     const file = await readFile(path.join(uploadDir, asset.storageKey));
 
     return new Response(file, {
-      headers: {
-        "Cache-Control": getMediaCacheControl(asset.visibility),
-        "Content-Type": asset.mimeType,
-      },
+      headers: getMediaResponseHeaders(asset),
     });
   } catch (error) {
     if (error instanceof Error && "code" in error && error.code === "ENOENT") {

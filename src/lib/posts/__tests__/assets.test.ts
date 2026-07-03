@@ -21,7 +21,7 @@ describe("post asset helpers", () => {
     expect(extractAssetIds(markdown)).toEqual(["asset_one", "asset-two"]);
   });
 
-  it("syncs referenced asset visibility to a post", async () => {
+  it("syncs referenced asset visibility to unattached or same-post assets", async () => {
     await syncPostAssetVisibility(
       "post_1",
       "![one](/media/asset_one) ![two](/media/asset-two)",
@@ -33,6 +33,7 @@ describe("post asset helpers", () => {
         id: {
           in: ["asset_one", "asset-two"],
         },
+        OR: [{ postId: null }, { postId: "post_1" }],
       },
       data: {
         postId: "post_1",
@@ -41,11 +42,43 @@ describe("post asset helpers", () => {
     });
   });
 
-  it("does not update assets when markdown has no media references", async () => {
+  it("detaches same-post assets that are no longer referenced", async () => {
     updateMany.mockClear();
 
-    await syncPostAssetVisibility("post_1", "No media here.", PostVisibility.PRIVATE);
+    await syncPostAssetVisibility(
+      "post_1",
+      "![one](/media/asset_one) ![two](/media/asset-two)",
+      PostVisibility.PUBLIC,
+    );
 
-    expect(updateMany).not.toHaveBeenCalled();
+    expect(updateMany).toHaveBeenCalledWith({
+      where: {
+        postId: "post_1",
+        id: {
+          notIn: ["asset_one", "asset-two"],
+        },
+      },
+      data: {
+        postId: null,
+        visibility: PostVisibility.PRIVATE,
+      },
+    });
+  });
+
+  it("detaches all same-post assets when markdown has no media references", async () => {
+    updateMany.mockClear();
+
+    await syncPostAssetVisibility("post_1", "No media here.", PostVisibility.PUBLIC);
+
+    expect(updateMany).toHaveBeenCalledTimes(1);
+    expect(updateMany).toHaveBeenCalledWith({
+      where: {
+        postId: "post_1",
+      },
+      data: {
+        postId: null,
+        visibility: PostVisibility.PRIVATE,
+      },
+    });
   });
 });

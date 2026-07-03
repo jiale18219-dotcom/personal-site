@@ -3,7 +3,11 @@ import path from "node:path";
 
 import { NextResponse } from "next/server";
 
-import { createStorageKey, getUploadValidationError } from "./helpers";
+import {
+  createStorageKey,
+  getUploadSignatureValidationError,
+  getUploadValidationError,
+} from "./helpers";
 
 export const runtime = "nodejs";
 
@@ -27,9 +31,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: validationError }, { status: 400 });
   }
 
+  const bytes = Buffer.from(await file.arrayBuffer());
+  const signatureError = getUploadSignatureValidationError(file, bytes);
+
+  if (signatureError) {
+    return NextResponse.json({ error: signatureError }, { status: 400 });
+  }
+
   const uploadDir = process.env.UPLOAD_DIR ?? "./uploads";
   const storageKey = createStorageKey(file.name);
-  const bytes = Buffer.from(await file.arrayBuffer());
 
   await mkdir(uploadDir, { recursive: true });
   await writeFile(path.join(uploadDir, storageKey), bytes);

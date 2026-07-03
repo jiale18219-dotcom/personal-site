@@ -1,4 +1,4 @@
-import type { PostVisibility } from "@prisma/client";
+import { PostVisibility } from "@prisma/client";
 
 import { prisma } from "../db";
 
@@ -22,6 +22,16 @@ export async function syncPostAssetVisibility(
   const assetIds = extractAssetIds(bodyMarkdown);
 
   if (assetIds.length === 0) {
+    await prisma.asset.updateMany({
+      where: {
+        postId,
+      },
+      data: {
+        postId: null,
+        visibility: PostVisibility.PRIVATE,
+      },
+    });
+
     return;
   }
 
@@ -30,10 +40,24 @@ export async function syncPostAssetVisibility(
       id: {
         in: assetIds,
       },
+      OR: [{ postId: null }, { postId }],
     },
     data: {
       postId,
       visibility,
+    },
+  });
+
+  await prisma.asset.updateMany({
+    where: {
+      postId,
+      id: {
+        notIn: assetIds,
+      },
+    },
+    data: {
+      postId: null,
+      visibility: PostVisibility.PRIVATE,
     },
   });
 }
