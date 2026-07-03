@@ -1,33 +1,20 @@
 # Writing Module
 
-This personal-site writing module is a lightweight single-owner backend, not a CMS.
+The custom PostgreSQL/MDXEditor writing module is deprecated.
 
-## Local development
+The selected writing product for personalSite is Ghost, running independently on a subdomain such as `https://blog.yorick.dev`.
 
-1. Copy `.env.example` to `.env`.
-2. Set `DATABASE_URL`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD`.
-3. Start PostgreSQL.
-4. Run `npm run db:migrate`.
-5. Run `npm run db:seed`.
-6. Run `npm run dev`.
-7. Open `/admin/login`.
+## Current direction
 
-## Content rules
+- Ghost owns writing, editing, publishing, media, RSS, SEO, and the admin experience.
+- personalSite remains the portfolio/homepage and links to Ghost.
+- `/writing` redirects to Ghost.
+- The old `/admin/posts` workbench should not receive further product investment.
 
-- `DRAFT`: admin only.
-- `PUBLISHED + PUBLIC`: visible in `/writing`, readable by anyone, included in sitemap.
-- `PUBLISHED + UNLISTED`: readable by direct slug, excluded from listing and sitemap, marked `noindex`.
-- `PUBLISHED + PRIVATE`: admin only.
-- `ARCHIVED`: admin only.
+## Ghost operations
 
-## Uploads
+See `infra/ghost/README.md` for deployment, backup, restore, and upgrade instructions.
 
-Image files are stored in `UPLOAD_DIR`. PostgreSQL stores file metadata and visibility. Back up both PostgreSQL and `UPLOAD_DIR`.
+## Decommission policy
 
-## Backup
-
-Run a daily `pg_dump` for the database and archive `UPLOAD_DIR`. Keep at least 7 daily backups.
-
-## Existing content
-
-The existing static `src/content/thinking.ts` content remains static. Importing it into PostgreSQL is a separate migration step if the new module proves useful.
+Do not remove the old custom writing code until Ghost is confirmed working in production and the user approves cleanup.

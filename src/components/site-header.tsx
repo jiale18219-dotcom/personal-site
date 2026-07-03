@@ -3,18 +3,25 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
-const navItems = [
-  { id: "work", label: "work", href: "#work", route: false },
-  { id: "writing", label: "writing", href: "/writing", route: true },
-  { id: "playground", label: "playground", href: "/playground", route: true },
-  { id: "about", label: "about", href: "/about", route: true },
+import { getBlogUrl } from "@/lib/blog-url";
+
+type NavItem =
+  | { id: string; label: string; href: string; kind: "section" }
+  | { id: string; label: string; href: string; kind: "route" }
+  | { id: string; label: string; href: string; kind: "external" };
+
+const navItems: NavItem[] = [
+  { id: "work", label: "work", href: "#work", kind: "section" },
+  { id: "writing", label: "writing", href: getBlogUrl(), kind: "external" },
+  { id: "playground", label: "playground", href: "/playground", kind: "route" },
+  { id: "about", label: "about", href: "/about", kind: "route" },
 ];
 
 export function SiteHeader() {
   const [activeSection, setActiveSection] = useState("work");
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const ids = useMemo(() => navItems.filter((item) => !item.route).map((item) => item.id), []);
+  const ids = useMemo(() => navItems.filter((item) => item.kind === "section").map((item) => item.id), []);
 
   useEffect(() => {
     const observers = ids
@@ -60,12 +67,24 @@ export function SiteHeader() {
           Menu
         </button>
         <nav className={`site-nav ${menuOpen ? "is-open" : ""}`}>
-          {navItems.map((item) => (
-            item.route ? (
-              <Link key={item.id} href={item.href} onClick={() => setMenuOpen(false)}>
-                {item.label}
-              </Link>
-            ) : (
+          {navItems.map((item) => {
+            if (item.kind === "route") {
+              return (
+                <Link key={item.id} href={item.href} onClick={() => setMenuOpen(false)}>
+                  {item.label}
+                </Link>
+              );
+            }
+
+            if (item.kind === "external") {
+              return (
+                <a key={item.id} href={item.href} onClick={() => setMenuOpen(false)}>
+                  {item.label}
+                </a>
+              );
+            }
+
+            return (
               <a
                 key={item.id}
                 href={item.href}
@@ -74,8 +93,8 @@ export function SiteHeader() {
               >
                 {item.label}
               </a>
-            )
-          ))}
+            );
+          })}
         </nav>
       </div>
     </header>
