@@ -1,4 +1,4 @@
-import { PostVisibility } from "@prisma/client";
+import { PostStatus, PostVisibility } from "@prisma/client";
 import { describe, expect, it, vi } from "vitest";
 
 const updateMany = vi.hoisted(() => vi.fn());
@@ -25,6 +25,7 @@ describe("post asset helpers", () => {
     await syncPostAssetVisibility(
       "post_1",
       "![one](/media/asset_one) ![two](/media/asset-two)",
+      PostStatus.PUBLISHED,
       PostVisibility.PUBLIC,
     );
 
@@ -48,6 +49,7 @@ describe("post asset helpers", () => {
     await syncPostAssetVisibility(
       "post_1",
       "![one](/media/asset_one) ![two](/media/asset-two)",
+      PostStatus.PUBLISHED,
       PostVisibility.PUBLIC,
     );
 
@@ -68,7 +70,12 @@ describe("post asset helpers", () => {
   it("detaches all same-post assets when markdown has no media references", async () => {
     updateMany.mockClear();
 
-    await syncPostAssetVisibility("post_1", "No media here.", PostVisibility.PUBLIC);
+    await syncPostAssetVisibility(
+      "post_1",
+      "No media here.",
+      PostStatus.PUBLISHED,
+      PostVisibility.PUBLIC,
+    );
 
     expect(updateMany).toHaveBeenCalledTimes(1);
     expect(updateMany).toHaveBeenCalledWith({
@@ -78,6 +85,78 @@ describe("post asset helpers", () => {
       data: {
         postId: null,
         visibility: PostVisibility.PRIVATE,
+      },
+    });
+  });
+
+  it("keeps draft public post assets private", async () => {
+    updateMany.mockClear();
+
+    await syncPostAssetVisibility(
+      "post_1",
+      "![one](/media/asset_one)",
+      PostStatus.DRAFT,
+      PostVisibility.PUBLIC,
+    );
+
+    expect(updateMany).toHaveBeenCalledWith({
+      where: {
+        id: {
+          in: ["asset_one"],
+        },
+        OR: [{ postId: null }, { postId: "post_1" }],
+      },
+      data: {
+        postId: "post_1",
+        visibility: PostVisibility.PRIVATE,
+      },
+    });
+  });
+
+  it("keeps archived public post assets private", async () => {
+    updateMany.mockClear();
+
+    await syncPostAssetVisibility(
+      "post_1",
+      "![one](/media/asset_one)",
+      PostStatus.ARCHIVED,
+      PostVisibility.PUBLIC,
+    );
+
+    expect(updateMany).toHaveBeenCalledWith({
+      where: {
+        id: {
+          in: ["asset_one"],
+        },
+        OR: [{ postId: null }, { postId: "post_1" }],
+      },
+      data: {
+        postId: "post_1",
+        visibility: PostVisibility.PRIVATE,
+      },
+    });
+  });
+
+  it("keeps published unlisted post assets unlisted", async () => {
+    updateMany.mockClear();
+
+    await syncPostAssetVisibility(
+      "post_1",
+      "![one](/media/asset_one)",
+      PostStatus.PUBLISHED,
+      PostVisibility.UNLISTED,
+    );
+
+    expect(updateMany).toHaveBeenCalledWith({
+      where: {
+        id: {
+          in: ["asset_one"],
+        },
+        OR: [{ postId: null }, { postId: "post_1" }],
+      },
+      data: {
+        postId: "post_1",
+        visibility: PostVisibility.UNLISTED,
       },
     });
   });

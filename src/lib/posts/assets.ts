@@ -1,4 +1,4 @@
-import { PostVisibility } from "@prisma/client";
+import { PostStatus, PostVisibility } from "@prisma/client";
 
 import { prisma } from "../db";
 
@@ -17,9 +17,12 @@ export function extractAssetIds(markdown: string): string[] {
 export async function syncPostAssetVisibility(
   postId: string,
   bodyMarkdown: string,
+  status: PostStatus,
   visibility: PostVisibility,
 ): Promise<void> {
   const assetIds = extractAssetIds(bodyMarkdown);
+  const assetVisibility =
+    status === PostStatus.PUBLISHED ? visibility : PostVisibility.PRIVATE;
 
   if (assetIds.length === 0) {
     await prisma.asset.updateMany({
@@ -44,7 +47,7 @@ export async function syncPostAssetVisibility(
     },
     data: {
       postId,
-      visibility,
+      visibility: assetVisibility,
     },
   });
 

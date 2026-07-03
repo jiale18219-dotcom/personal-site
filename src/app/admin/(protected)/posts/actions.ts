@@ -23,10 +23,11 @@ async function requireCurrentAdmin() {
 async function syncAssets(
   postId: string,
   bodyMarkdown: string,
+  status: Awaited<ReturnType<typeof parsePostForm>>["status"],
   visibility: Awaited<ReturnType<typeof parsePostForm>>["visibility"],
 ) {
   const { syncPostAssetVisibility } = await import("@/lib/posts/assets");
-  await syncPostAssetVisibility(postId, bodyMarkdown, visibility);
+  await syncPostAssetVisibility(postId, bodyMarkdown, status, visibility);
 }
 
 export async function logoutAction() {
@@ -52,7 +53,7 @@ export async function createPostAction(formData: FormData): Promise<void> {
       },
     });
 
-    await syncAssets(post.id, post.bodyMarkdown, post.visibility);
+    await syncAssets(post.id, post.bodyMarkdown, post.status, post.visibility);
     revalidatePath("/writing");
     postId = post.id;
   } catch (error) {
@@ -83,7 +84,7 @@ export async function updatePostAction(id: string, formData: FormData): Promise<
       },
     });
 
-    await syncAssets(post.id, post.bodyMarkdown, post.visibility);
+    await syncAssets(post.id, post.bodyMarkdown, post.status, post.visibility);
     revalidatePath("/writing");
     revalidatePath(`/writing/${currentPost.slug}`);
     revalidatePath(`/writing/${post.slug}`);
@@ -104,6 +105,7 @@ export async function archivePostAction(id: string): Promise<void> {
     data: { status: PostStatus.ARCHIVED },
   });
 
+  await syncAssets(post.id, post.bodyMarkdown, post.status, post.visibility);
   revalidatePath("/writing");
   revalidatePath(`/writing/${post.slug}`);
 }
