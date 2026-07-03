@@ -3,6 +3,7 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { prisma } from "@/lib/db";
+import { shouldTouchSession } from "./session-touch";
 import { createSessionToken, hashSessionToken } from "./token";
 
 const ADMIN_SESSION_COOKIE = "personal_site_admin";
@@ -59,15 +60,17 @@ export async function getOptionalAdminUser(): Promise<AdminUser | null> {
   const now = new Date();
 
   if (session.expiresAt <= now) {
-    await prisma.adminSession.delete({ where: { id: session.id } });
+    await prisma.adminSession.deleteMany({ where: { id: session.id } });
     cookieStore.delete(ADMIN_SESSION_COOKIE);
     return null;
   }
 
-  await prisma.adminSession.update({
-    where: { id: session.id },
-    data: { lastSeenAt: now },
-  });
+  if (shouldTouchSession(session.lastSeenAt, now)) {
+    await prisma.adminSession.updateMany({
+      where: { id: session.id },
+      data: { lastSeenAt: now },
+    });
+  }
 
   return session.user;
 }

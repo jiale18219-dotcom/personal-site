@@ -2,7 +2,7 @@ import { prisma } from "../src/lib/db";
 import { hashPassword } from "../src/lib/auth/password";
 
 async function main() {
-  const email = process.env.ADMIN_EMAIL;
+  const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
   const password = process.env.ADMIN_PASSWORD;
 
   if (!email || !password) {

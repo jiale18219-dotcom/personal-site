@@ -4,12 +4,15 @@ import { MarkdownEditor } from "@/components/admin/markdown-editor";
 type PostFormProps = {
   post?: Post;
   action: (formData: FormData) => void | Promise<void>;
+  error?: string;
   submitLabel: string;
 };
 
-export function PostForm({ post, action, submitLabel }: PostFormProps) {
+export function PostForm({ post, action, error, submitLabel }: PostFormProps) {
   return (
     <form action={action} className="admin-post-form">
+      {error ? <p className="admin-form-error">{error}</p> : null}
+
       <div className="admin-form-grid">
         <label className="admin-field">
           Title

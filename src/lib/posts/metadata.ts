@@ -24,7 +24,7 @@ export function getPostMetadata(
 
   return {
     title: `${post.title} | Writing`,
-    description: post.summary,
+    description: post.summary || undefined,
     robots: shouldIndexPost(post) ? undefined : hiddenPostMetadata.robots,
   };
 }

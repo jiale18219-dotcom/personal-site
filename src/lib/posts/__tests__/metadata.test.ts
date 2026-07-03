@@ -49,6 +49,16 @@ describe("post metadata access rules", () => {
     });
   });
 
+  it("omits empty metadata descriptions", () => {
+    const post = makePost({ summary: "" });
+
+    expect(getPostMetadata(post, false)).toEqual({
+      title: "Public note | Writing",
+      description: undefined,
+      robots: undefined,
+    });
+  });
+
   it("exposes unlisted post metadata without allowing indexing", () => {
     const post = makePost({ visibility: PostVisibility.UNLISTED });
 
