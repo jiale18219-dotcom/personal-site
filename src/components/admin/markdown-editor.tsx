@@ -7,6 +7,7 @@ import {
   InsertCodeBlock,
   InsertImage,
   InsertTable,
+  InsertThematicBreak,
   ListsToggle,
   MDXEditor,
   UndoRedo,
@@ -70,6 +71,7 @@ export function MarkdownEditor({ name, initialMarkdown }: MarkdownEditorProps) {
                 <BoldItalicUnderlineToggles />
                 <ListsToggle />
                 <CreateLink />
+                <InsertThematicBreak />
                 <InsertImage />
                 <InsertTable />
                 <InsertCodeBlock />
