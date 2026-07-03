@@ -1851,3 +1851,94 @@ button {
     width: 100%;
   }
 }
+
+.writing-page,
+.writing-detail {
+  padding: 120px 0 80px;
+}
+
+.writing-page__inner,
+.writing-detail__inner {
+  max-width: 860px;
+}
+
+.writing-hero,
+.writing-article__header {
+  margin-bottom: 42px;
+}
+
+.writing-hero h1,
+.writing-article h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 6vw, 5.8rem);
+  line-height: 0.95;
+  margin: 0 0 18px;
+}
+
+.writing-list {
+  display: grid;
+  gap: 18px;
+}
+
+.writing-card,
+.writing-empty {
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: rgba(251, 249, 245, 0.72);
+  padding: 24px;
+}
+
+.writing-card {
+  transition: transform 160ms ease, border-color 160ms ease;
+}
+
+.writing-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(47, 43, 38, 0.36);
+}
+
+.writing-card__date {
+  color: var(--text-soft);
+  font-size: 0.86rem;
+  margin: 0 0 10px;
+}
+
+.writing-card h2 {
+  font-family: var(--serif);
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  margin: 0 0 10px;
+}
+
+.writing-card p,
+.writing-empty,
+.writing-hero p,
+.writing-article__header p {
+  color: var(--text-soft);
+}
+
+.markdown-content {
+  font-size: 1.05rem;
+  line-height: 1.9;
+}
+
+.markdown-content h2,
+.markdown-content h3 {
+  font-family: var(--serif);
+  line-height: 1.15;
+  margin: 2.2em 0 0.7em;
+}
+
+.markdown-content p,
+.markdown-content ul,
+.markdown-content ol,
+.markdown-content blockquote,
+.markdown-content pre {
+  margin: 0 0 1.25em;
+}
+
+.markdown-content a {
+  color: var(--tag-red);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}

@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 
 const navItems = [
   { id: "work", label: "work", href: "#work", route: false },
+  { id: "writing", label: "writing", href: "/writing", route: true },
   { id: "playground", label: "playground", href: "/playground", route: true },
   { id: "about", label: "about", href: "/about", route: true },
 ];
