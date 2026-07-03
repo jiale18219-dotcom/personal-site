@@ -38,8 +38,8 @@ export function parsePostForm(formData: FormData): ParsedPostInput {
     slug: slugify(rawSlug || title),
     summary: getString(formData, "summary").trim(),
     bodyMarkdown: getString(formData, "bodyMarkdown").trim(),
-    status: parsePostStatus(getString(formData, "status")),
-    visibility: parsePostVisibility(getString(formData, "visibility")),
+    status: parsePostStatus(getString(formData, "status").trim()),
+    visibility: parsePostVisibility(getString(formData, "visibility").trim()),
   };
 }
 
