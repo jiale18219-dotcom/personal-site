@@ -10,3 +10,7 @@ coverage
 ui-prompt_new.md
 介绍图片
 /playground
+
+# Ghost deployment runtime files
+infra/ghost/.env
+infra/ghost/backups/
