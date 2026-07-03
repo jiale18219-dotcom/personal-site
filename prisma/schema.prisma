@@ -51,13 +51,15 @@ model Post {
   status       PostStatus     @default(DRAFT)
   visibility   PostVisibility @default(PRIVATE)
   coverAssetId String?
+  coverAsset   Asset?         @relation("PostCover", fields: [coverAssetId], references: [id], onDelete: SetNull)
   publishedAt  DateTime?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  assets       Asset[]
+  assets       Asset[]        @relation("PostAssets")
 
   @@index([status, visibility, publishedAt])
   @@index([updatedAt])
+  @@index([coverAssetId])
 }
 
 model Asset {
@@ -70,7 +72,8 @@ model Asset {
   visibility   PostVisibility @default(PRIVATE)
   postId       String?
   createdAt    DateTime       @default(now())
-  post         Post?          @relation(fields: [postId], references: [id], onDelete: SetNull)
+  post         Post?          @relation("PostAssets", fields: [postId], references: [id], onDelete: SetNull)
+  coverForPosts Post[]        @relation("PostCover")
 
   @@index([postId])
   @@index([visibility])

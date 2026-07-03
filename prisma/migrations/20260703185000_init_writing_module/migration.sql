@@ -86,6 +86,9 @@ CREATE INDEX "Post_status_visibility_publishedAt_idx" ON "Post"("status", "visib
 CREATE INDEX "Post_updatedAt_idx" ON "Post"("updatedAt");
 
 -- CreateIndex
+CREATE INDEX "Post_coverAssetId_idx" ON "Post"("coverAssetId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Asset_storageKey_key" ON "Asset"("storageKey");
 
 -- CreateIndex
@@ -98,5 +101,7 @@ CREATE INDEX "Asset_visibility_idx" ON "Asset"("visibility");
 ALTER TABLE "AdminSession" ADD CONSTRAINT "AdminSession_userId_fkey" FOREIGN KEY ("userId") REFERENCES "AdminUser"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Asset" ADD CONSTRAINT "Asset_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Post" ADD CONSTRAINT "Post_coverAssetId_fkey" FOREIGN KEY ("coverAssetId") REFERENCES "Asset"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
+-- AddForeignKey
+ALTER TABLE "Asset" ADD CONSTRAINT "Asset_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE SET NULL ON UPDATE CASCADE;
