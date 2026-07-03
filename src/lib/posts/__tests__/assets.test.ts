@@ -1,0 +1,51 @@
+import { PostVisibility } from "@prisma/client";
+import { describe, expect, it, vi } from "vitest";
+
+const updateMany = vi.hoisted(() => vi.fn());
+
+vi.mock("../../db", () => ({
+  prisma: {
+    asset: {
+      updateMany,
+    },
+  },
+}));
+
+import { extractAssetIds, syncPostAssetVisibility } from "../assets";
+
+describe("post asset helpers", () => {
+  it("extracts unique media IDs in first-seen order", () => {
+    const markdown =
+      "![one](/media/asset_one) ![two](/media/asset-two) ![again](/media/asset_one)";
+
+    expect(extractAssetIds(markdown)).toEqual(["asset_one", "asset-two"]);
+  });
+
+  it("syncs referenced asset visibility to a post", async () => {
+    await syncPostAssetVisibility(
+      "post_1",
+      "![one](/media/asset_one) ![two](/media/asset-two)",
+      PostVisibility.PUBLIC,
+    );
+
+    expect(updateMany).toHaveBeenCalledWith({
+      where: {
+        id: {
+          in: ["asset_one", "asset-two"],
+        },
+      },
+      data: {
+        postId: "post_1",
+        visibility: PostVisibility.PUBLIC,
+      },
+    });
+  });
+
+  it("does not update assets when markdown has no media references", async () => {
+    updateMany.mockClear();
+
+    await syncPostAssetVisibility("post_1", "No media here.", PostVisibility.PRIVATE);
+
+    expect(updateMany).not.toHaveBeenCalled();
+  });
+});
