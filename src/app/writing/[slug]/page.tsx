@@ -6,7 +6,8 @@ import { Footer } from "@/components/footer";
 import { SiteHeader } from "@/components/site-header";
 import { MarkdownContent } from "@/components/writing/markdown-content";
 import { formatDate } from "@/lib/content";
-import { canReadPost, shouldIndexPost } from "@/lib/posts/access";
+import { canReadPost } from "@/lib/posts/access";
+import { getPostMetadata } from "@/lib/posts/metadata";
 import { getPostBySlug } from "@/lib/posts/queries";
 
 export const dynamic = "force-dynamic";
@@ -17,17 +18,13 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const { getOptionalAdminUser } = await import("@/lib/auth/session");
+  const [post, adminUser] = await Promise.all([
+    getPostBySlug(slug),
+    getOptionalAdminUser(),
+  ]);
 
-  if (!post) {
-    return {};
-  }
-
-  return {
-    title: `${post.title} | Writing`,
-    description: post.summary,
-    robots: shouldIndexPost(post) ? undefined : { index: false, follow: false },
-  };
+  return getPostMetadata(post, Boolean(adminUser));
 }
 
 export default async function WritingDetailPage({ params }: Props) {
