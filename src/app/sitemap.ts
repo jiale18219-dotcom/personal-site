@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 
 import { getPublishedPosts } from "@/lib/blog";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const posts = getPublishedPosts();
