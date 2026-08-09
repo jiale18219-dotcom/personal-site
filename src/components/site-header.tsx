@@ -3,16 +3,13 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
-import { getBlogUrl } from "@/lib/blog-url";
-
 type NavItem =
   | { id: string; label: string; href: string; kind: "section" }
-  | { id: string; label: string; href: string; kind: "route" }
-  | { id: string; label: string; href: string; kind: "external" };
+  | { id: string; label: string; href: string; kind: "route" };
 
 const navItems: NavItem[] = [
   { id: "work", label: "work", href: "#work", kind: "section" },
-  { id: "writing", label: "writing", href: getBlogUrl(), kind: "external" },
+  { id: "writing", label: "writing", href: "/blog", kind: "route" },
   { id: "playground", label: "playground", href: "/playground", kind: "route" },
   { id: "about", label: "about", href: "/about", kind: "route" },
 ];
@@ -73,14 +70,6 @@ export function SiteHeader() {
                 <Link key={item.id} href={item.href} onClick={() => setMenuOpen(false)}>
                   {item.label}
                 </Link>
-              );
-            }
-
-            if (item.kind === "external") {
-              return (
-                <a key={item.id} href={item.href} onClick={() => setMenuOpen(false)}>
-                  {item.label}
-                </a>
               );
             }
 
