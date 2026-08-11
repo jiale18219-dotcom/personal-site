@@ -3,7 +3,7 @@ import { CustomCursor } from "@/components/custom-cursor";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "yorick zhang | Personal Space",
+  title: "yorick jue | Personal Space",
   description:
     "一个偏创意、内容驱动、会持续更新的个人空间网站，用来展示产品、想法和正在发生的创作状态。",
 };

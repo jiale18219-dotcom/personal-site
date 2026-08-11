@@ -51,7 +51,7 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="container site-header__inner">
         <Link href="/" className="site-brand">
-          <span className="site-brand__name">张佳乐 / yorick zhang</span>
+          <span className="site-brand__name">yorick jue</span>
           <span className="site-brand__sub">personal portfolio</span>
         </Link>
         <button

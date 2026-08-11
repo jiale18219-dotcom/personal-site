@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 
 export const metadata: Metadata = {
-  title: "About | Yorick Zhang",
+  title: "About | Yorick Jue",
   description: "作者因为比较害羞，所以 About 页面目前正在维护中。",
 };
 

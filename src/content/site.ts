@@ -1,7 +1,7 @@
 import { Profile } from "@/types/content";
 
 export const profile: Profile = {
-  name: "张佳乐 / yorick zhang",
+  name: "yorick jue",
   title: "Product builder / AI applications / personal tools",
   intro:
     "以前写 Java 后端，现在更想把模糊的 idea 做成真的产品。我在做个人工具、AI 应用和一些带点表达感的数字作品，这里先放一个会继续生长的版本。",

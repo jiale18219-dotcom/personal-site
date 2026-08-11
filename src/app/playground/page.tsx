@@ -6,7 +6,7 @@ export default function PlaygroundPage() {
     <div className="playground-page">
       <header className="playground-header">
         <Link href="/" className="playground-brand">
-          yorick zhang
+          yorick jue
         </Link>
         <nav className="playground-nav">
           <Link href="/#work">work</Link>

@@ -7,7 +7,7 @@ import { formatDate } from "@/lib/content";
 import { getPublishedPosts } from "@/lib/blog";
 
 export const metadata: Metadata = {
-  title: "Blog | yorick zhang",
+  title: "Blog | yorick jue",
   description: "技术博客和持续更新的个人记录。",
 };
 

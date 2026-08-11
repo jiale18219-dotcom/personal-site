@@ -8,7 +8,7 @@ export function Footer() {
           <a href="https://github.com/yorickjue" target="_blank" rel="noreferrer">
             GitHub
           </a>
-          <span className="footer-signoff">© 2026 张佳乐 / yorick zhang</span>
+          <span className="footer-signoff">© 2026 yorick jue</span>
         </div>
       </div>
     </footer>
