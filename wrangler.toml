@@ -1,0 +1,6 @@
+name = "personal-site"
+compatibility_date = "2025-08-11"
+
+[[routes]]
+pattern = "www.yorickjue.com/*"
+          custom_domain = true
